@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,7 +70,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
-    // 👇 REEMPLAZA ESTAS URLS POR LAS DE TUS WEBHOOKS DE N8N (URL de Producción) 👇
+    // URLS de Producción de n8n
     const WEBHOOK_PROCESS_EMAIL = 'https://alogroup.app.n8n.cloud/webhook-test/sap/processEmail';
     const WEBHOOK_VALIDATE_OTP = 'https://alogroup.app.n8n.cloud/webhook-test/sap/validateOTP';
 
@@ -125,7 +125,6 @@
             M.toast({html: result.message, classes: response.ok ? 'green darken-1' : 'red darken-1'});
             
             if (response.ok && result.success) {
-                // Guardamos los datos de validación para el siguiente paso
                 otpHashGlobal = result.otpHash;
                 otpExpiryGlobal = result.otpExpiry;
                 
@@ -164,17 +163,17 @@
             
             hideLoading();
             
-            if (response.ok) { // Si el webhook devolvió status 200
+            if (response.ok) { 
                 M.toast({html: '✅ Validado con éxito.', classes: 'green darken-1'});
                 document.getElementById('otp-form-container').classList.add('hide');
                 document.getElementById('success-message-container').classList.remove('hide');
                 
-                // Guardamos la información de SAP limpia en la sesión del navegador
                 sessionStorage.setItem('sapClientData', JSON.stringify(result.data));
                 sessionStorage.setItem('sapRut', userRutGlobal);
                 
-                // Redirigimos al formulario
-                setTimeout(() => { window.location.href = 'formulario.html'; }, 1000);
+                // 👇 ESTE ES EL CAMBIO PRINCIPAL: Redirección al Menú 👇
+                setTimeout(() => { window.location.href = 'menucliente.html'; }, 1000);
+                
             } else {
                 M.toast({html: result.message || '❌ Error al validar.', classes: 'red darken-1'});
             }
